@@ -1,5 +1,6 @@
 local lp = game:GetService("Players").LocalPlayer
 local gui = Instance.new("ScreenGui", game.CoreGui)
+gui.Name = "BNXYUNG_GUI"
 local panel = Instance.new("Frame", gui)
 panel.Size = UDim2.new(0, 500, 0, 400)
 panel.Position = UDim2.new(0.5, -250, 0.5, -200)
