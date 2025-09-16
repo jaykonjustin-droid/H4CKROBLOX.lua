@@ -8,34 +8,6 @@ panel.Position = UDim2.new(0.5, -250, 1, 0)
 panel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 panel.Visible = true
 
--- Activar Headlock Aimbot al abrir
-_G.AimbotEnabled = true
-_G.AimPart = "Head"
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Aimbot-Script/main/Aimbot%20Script.lua"))()
-
--- FOV visual
-local fovCircle = Drawing.new("Circle")
-fovCircle.Visible = true
-fovCircle.Radius = 100
-fovCircle.Color = Color3.fromRGB(0, 170, 255)
-fovCircle.Thickness = 2
-fovCircle.Transparency = 0.6
-fovCircle.Filled = false
-game:GetService("RunService").RenderStepped:Connect(function()
-    local mouse = lp:GetMouse()
-    fovCircle.Position = Vector2.new(mouse.X, mouse.Y)
-end)
-
--- Título BNXYUNG7
-local title = Instance.new("TextLabel", panel)
-title.Size = UDim2.new(1, 0, 0, 40)
-title.Position = UDim2.new(0, 0, 0, 0)
-title.Text = "🔥 BNXYUNG7 MENU 🔥"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 20
-
 -- Bordes + sombra
 local corner = Instance.new("UICorner", panel)
 corner.CornerRadius = UDim.new(0, 12)
@@ -48,6 +20,15 @@ local TweenService = game:GetService("TweenService")
 TweenService:Create(panel, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {
     Position = UDim2.new(0.5, -250, 0.5, -200)
 }):Play()
+-- Título BNXYUNG7
+local title = Instance.new("TextLabel", panel)
+title.Size = UDim2.new(1, 0, 0, 40)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.Text = "🔥 BNXYUNG7 MENU 🔥"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 20
 
 -- Botón ❌ cerrar
 local closeBtn = Instance.new("TextButton", panel)
@@ -58,10 +39,6 @@ closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 closeBtn.BackgroundColor3 = Color3.fromRGB(100, 0, 0)
 closeBtn.Font = Enum.Font.GothamBold
 closeBtn.TextSize = 18
-closeBtn.MouseButton1Click:Connect(function()
-    panel.Visible = false
-    showBtn.Visible = true
-end)
 
 -- Botón ➖ minimizar
 local minimizeBtn = Instance.new("TextButton", panel)
@@ -72,10 +49,6 @@ minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 minimizeBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 minimizeBtn.Font = Enum.Font.GothamBold
 minimizeBtn.TextSize = 18
-minimizeBtn.MouseButton1Click:Connect(function()
-    panel.Visible = false
-    showBtn.Visible = true
-end)
 
 -- Botón flotante para reabrir
 local showBtn = Instance.new("TextButton", gui)
@@ -87,12 +60,22 @@ showBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 showBtn.Font = Enum.Font.GothamBold
 showBtn.TextSize = 16
 showBtn.Visible = false
+
+-- Funciones de los botones
+closeBtn.MouseButton1Click:Connect(function()
+    panel.Visible = false
+    showBtn.Visible = true
+end)
+
+minimizeBtn.MouseButton1Click:Connect(function()
+    panel.Visible = false
+    showBtn.Visible = true
+end)
+
 showBtn.MouseButton1Click:Connect(function()
     panel.Visible = true
     showBtn.Visible = false
 end)
-
--- Categoría AIMBOT PRO
 local aimbotTab = {
     {"Headlock Aimbot", function()
         _G.AimbotEnabled = true
@@ -108,8 +91,6 @@ local aimbotTab = {
         _G.AimbotEnabled = not _G.AimbotEnabled
     end}
 }
-
--- Categoría ESP PRO
 local espTab = {
     {"ESP Skeleton Azul", function()
         for _, p in pairs(game:GetService("Players"):GetPlayers()) do
@@ -124,25 +105,30 @@ local espTab = {
                         box.ZIndex = 10
                         box.Color3 = Color3.fromRGB(0, 170, 255)
                         box.Transparency = 0.3
-
-                        local pin = Instance.new("BillboardGui", part)
-                        pin.Size = UDim2.new(0, 12, 0, 12)
-                        pin.AlwaysOnTop = true
-                        pin.Adornee = part
-                        local dot = Instance.new("Frame", pin)
-                        dot.Size = UDim2.new(1, 0, 1, 0)
-                        dot.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-                        dot.BackgroundTransparency = 0.2
-                        dot.BorderSizePixel = 0
-                        dot.AnchorPoint = Vector2.new(0.5, 0.5)
                     end
                 end
             end
         end
     end}
 }
-
--- Sistema de botones
+local vidaTab = {
+    {"Vida infinita", function()
+        local char = lp.Character
+        if char and char:FindFirstChild("Humanoid") then
+            while true do
+                char.Humanoid.Health = char.Humanoid.MaxHealth
+                wait(0.5)
+            end
+        end
+    end},
+    {"Notificación de activación", function()
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "BNXYUNG7",
+            Text = "Función activada correctamente ✅",
+            Duration = 3
+        })
+    end}
+}
 local scroll = Instance.new("ScrollingFrame", panel)
 scroll.Size = UDim2.new(1, -20, 1, -60)
 scroll.Position = UDim2.new(0, 10, 0, 50)
@@ -154,7 +140,7 @@ local layout = Instance.new("UIListLayout", scroll)
 layout.Padding = UDim.new(0, 6)
 layout.SortOrder = Enum.SortOrder.LayoutOrder
 
--- Mostrar botones AIMBOT
+-- Mostrar botones por categoría
 for _, data in ipairs(aimbotTab) do
     local btn = Instance.new("TextButton", scroll)
     btn.Size = UDim2.new(1, -10, 0, 30)
@@ -166,11 +152,21 @@ for _, data in ipairs(aimbotTab) do
     btn.MouseButton1Click:Connect(data[2])
 end
 
--- Mostrar botones ESP
 for _, data in ipairs(espTab) do
     local btn = Instance.new("TextButton", scroll)
     btn.Size = UDim2.new(1, -10, 0, 30)
     btn.Text = "👁️ " .. data[1]
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    btn.Font = Enum.Font.Gotham
+    btn.TextSize = 16
+    btn.MouseButton1Click:Connect(data[2])
+end
+
+for _, data in ipairs(vidaTab) do
+    local btn = Instance.new("TextButton", scroll)
+    btn.Size = UDim2.new(1, -10, 0, 30)
+    btn.Text = "❤️ " .. data[1]
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     btn.Font = Enum.Font.Gotham
