@@ -1,34 +1,33 @@
-local lp = game:GetService("Players").LocalPlayer
-local gui = Instance.new("ScreenGui", game.CoreGui)
-gui.Name = "BNXYUNG_GUI"
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local lp = Players.LocalPlayer
+local mouse = lp:GetMouse()
 
-local panel = Instance.new("Frame", gui)
-panel.Size = UDim2.new(0, 500, 0, 400)
-panel.Position = UDim2.new(0.5, -250, 1, 0)
-panel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-panel.Visible = true
+local function getClosestPlayer()
+    local closest, dist = nil, math.huge
+    for _, p in pairs(Players:GetPlayers()) do
+        if p ~= lp and p.Character and p.Character:FindFirstChild("Head") then
+            local pos = p.Character.Head.Position
+            local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(pos)
+            if onScreen then
+                local mag = (Vector2.new(mouse.X, mouse.Y) - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
+                if mag < dist and mag < 120 then -- FOV reducido
+                    dist = mag
+                    closest = p
+                end
+            end
+        end
+    end
+    return closest
+end
 
--- Bordes + sombra
-local corner = Instance.new("UICorner", panel)
-corner.CornerRadius = UDim.new(0, 12)
-local stroke = Instance.new("UIStroke", panel)
-stroke.Thickness = 2
-stroke.Color = Color3.fromRGB(255, 0, 100)
-
--- Animación de entrada
-local TweenService = game:GetService("TweenService")
-TweenService:Create(panel, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {
-    Position = UDim2.new(0.5, -250, 0.5, -200)
-}):Play()
--- Título BNXYUNG7
-local title = Instance.new("TextLabel", panel)
-title.Size = UDim2.new(1, 0, 0, 40)
-title.Position = UDim2.new(0, 0, 0, 0)
-title.Text = "🔥 BNXYUNG7 MENU 🔥"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 20
+RunService.RenderStepped:Connect(function()
+    local target = getClosestPlayer()
+    if target and target.Character and target.Character:FindFirstChild("Head") then
+        mouse.TargetFilter = target.Character
+        mouse.Hit = target.Character.Head.CFrame
+    end
+end)
 
 -- Botón ❌ cerrar
 local closeBtn = Instance.new("TextButton", panel)
