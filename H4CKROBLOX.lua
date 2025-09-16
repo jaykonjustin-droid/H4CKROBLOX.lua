@@ -3,10 +3,10 @@ local RunService = game:GetService("RunService")
 local lp = Players.LocalPlayer
 local mouse = lp:GetMouse()
 
-local function getClosestEnemy()
+local function getClosestPlayer()
     local closest, dist = nil, math.huge
     for _, p in pairs(Players:GetPlayers()) do
-        if p ~= lp and p.Team ~= lp.Team and p.Character and p.Character:FindFirstChild("Head") then
+        if p ~= lp and p.Character and p.Character:FindFirstChild("Head") then
             local pos = p.Character.Head.Position
             local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(pos)
             if onScreen then
@@ -22,12 +22,13 @@ local function getClosestEnemy()
 end
 
 RunService.RenderStepped:Connect(function()
-    local target = getClosestEnemy()
+    local target = getClosestPlayer()
     if target and target.Character and target.Character:FindFirstChild("Head") then
         mouse.TargetFilter = target.Character
         mouse.Hit = target.Character.Head.CFrame
     end
 end)
+
 
 -- Botón ❌ cerrar
 local closeBtn = Instance.new("TextButton", panel)
