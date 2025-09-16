@@ -13,6 +13,19 @@ _G.AimbotEnabled = true
 _G.AimPart = "Head"
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Aimbot-Script/main/Aimbot%20Script.lua"))()
 
+-- FOV visual
+local fovCircle = Drawing.new("Circle")
+fovCircle.Visible = true
+fovCircle.Radius = 100
+fovCircle.Color = Color3.fromRGB(0, 170, 255)
+fovCircle.Thickness = 2
+fovCircle.Transparency = 0.6
+fovCircle.Filled = false
+game:GetService("RunService").RenderStepped:Connect(function()
+    local mouse = lp:GetMouse()
+    fovCircle.Position = Vector2.new(mouse.X, mouse.Y)
+end)
+
 -- Título BNXYUNG7
 local title = Instance.new("TextLabel", panel)
 title.Size = UDim2.new(1, 0, 0, 40)
@@ -111,6 +124,17 @@ local espTab = {
                         box.ZIndex = 10
                         box.Color3 = Color3.fromRGB(0, 170, 255)
                         box.Transparency = 0.3
+
+                        local pin = Instance.new("BillboardGui", part)
+                        pin.Size = UDim2.new(0, 12, 0, 12)
+                        pin.AlwaysOnTop = true
+                        pin.Adornee = part
+                        local dot = Instance.new("Frame", pin)
+                        dot.Size = UDim2.new(1, 0, 1, 0)
+                        dot.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+                        dot.BackgroundTransparency = 0.2
+                        dot.BorderSizePixel = 0
+                        dot.AnchorPoint = Vector2.new(0.5, 0.5)
                     end
                 end
             end
