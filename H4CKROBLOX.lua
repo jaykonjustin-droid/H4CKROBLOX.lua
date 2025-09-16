@@ -8,6 +8,11 @@ panel.Position = UDim2.new(0.5, -250, 1, 0)
 panel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 panel.Visible = true
 
+-- Activar Headlock Aimbot al abrir
+_G.AimbotEnabled = true
+_G.AimPart = "Head"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Aimbot-Script/main/Aimbot%20Script.lua"))()
+
 -- Título BNXYUNG7
 local title = Instance.new("TextLabel", panel)
 title.Size = UDim2.new(1, 0, 0, 40)
@@ -93,24 +98,21 @@ local aimbotTab = {
 
 -- Categoría ESP PRO
 local espTab = {
-    {"ESP Nombre + Línea", function()
+    {"ESP Skeleton Azul", function()
         for _, p in pairs(game:GetService("Players"):GetPlayers()) do
-            if p ~= lp and p.Character and p.Character:FindFirstChild("Head") then
-                local esp = Instance.new("BillboardGui", p.Character.Head)
-                esp.Size = UDim2.new(0, 100, 0, 40)
-                esp.AlwaysOnTop = true
-                local label = Instance.new("TextLabel", esp)
-                label.Size = UDim2.new(1, 0, 1, 0)
-                label.BackgroundTransparency = 1
-                label.Text = p.Name
-                label.TextColor3 = Color3.fromRGB(255, 255, 255)
-                label.Font = Enum.Font.GothamBold
-                label.TextSize = 14
-
-                local line = Instance.new("Frame", esp)
-                line.Size = UDim2.new(0, 2, 0, 60)
-                line.Position = UDim2.new(0.5, -1, 1, 0)
-                line.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+            if p ~= lp and p.Character then
+                for _, partName in ipairs({"Head", "Torso", "LeftArm", "RightArm", "LeftLeg", "RightLeg"}) do
+                    local part = p.Character:FindFirstChild(partName)
+                    if part then
+                        local box = Instance.new("BoxHandleAdornment", part)
+                        box.Size = part.Size
+                        box.Adornee = part
+                        box.AlwaysOnTop = true
+                        box.ZIndex = 10
+                        box.Color3 = Color3.fromRGB(0, 170, 255)
+                        box.Transparency = 0.3
+                    end
+                end
             end
         end
     end}
