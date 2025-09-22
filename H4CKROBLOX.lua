@@ -3,6 +3,7 @@ local RunService = game:GetService("RunService")
 local lp = Players.LocalPlayer
 local mouse = lp:GetMouse()
 
+-- 📌 Aimbot por FOV reducido
 local function getClosestPlayer()
     local closest, dist = nil, math.huge
     for _, p in pairs(Players:GetPlayers()) do
@@ -11,7 +12,7 @@ local function getClosestPlayer()
             local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(pos)
             if onScreen then
                 local mag = (Vector2.new(mouse.X, mouse.Y) - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
-                if mag < dist and mag < 120 then -- FOV reducido
+                if mag < dist and mag < 120 then
                     dist = mag
                     closest = p
                 end
@@ -29,8 +30,15 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
+-- 🎛️ GUI principal
+local gui = Instance.new("ScreenGui", lp:WaitForChild("PlayerGui"))
+local panel = Instance.new("Frame", gui)
+panel.Size = UDim2.new(0, 300, 0, 400)
+panel.Position = UDim2.new(0.5, -150, 0.5, -200)
+panel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+panel.BorderSizePixel = 0
 
--- Botón ❌ cerrar
+-- ❌ Botón cerrar
 local closeBtn = Instance.new("TextButton", panel)
 closeBtn.Size = UDim2.new(0, 30, 0, 30)
 closeBtn.Position = UDim2.new(1, -40, 0, 5)
@@ -40,7 +48,7 @@ closeBtn.BackgroundColor3 = Color3.fromRGB(100, 0, 0)
 closeBtn.Font = Enum.Font.GothamBold
 closeBtn.TextSize = 18
 
--- Botón ➖ minimizar
+-- ➖ Botón minimizar
 local minimizeBtn = Instance.new("TextButton", panel)
 minimizeBtn.Size = UDim2.new(0, 30, 0, 30)
 minimizeBtn.Position = UDim2.new(1, -80, 0, 5)
@@ -50,7 +58,7 @@ minimizeBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 minimizeBtn.Font = Enum.Font.GothamBold
 minimizeBtn.TextSize = 18
 
--- Botón flotante para reabrir
+-- ➕ Botón flotante para reabrir
 local showBtn = Instance.new("TextButton", gui)
 showBtn.Size = UDim2.new(0, 160, 0, 40)
 showBtn.Position = UDim2.new(0.5, -80, 0, 10)
@@ -61,7 +69,7 @@ showBtn.Font = Enum.Font.GothamBold
 showBtn.TextSize = 16
 showBtn.Visible = false
 
--- Funciones de los botones
+-- 🔁 Funciones de los botones
 closeBtn.MouseButton1Click:Connect(function()
     panel.Visible = false
     showBtn.Visible = true
@@ -76,6 +84,8 @@ showBtn.MouseButton1Click:Connect(function()
     panel.Visible = true
     showBtn.Visible = false
 end)
+
+-- 🎯 Aimbot
 local aimbotTab = {
     {"Headlock Aimbot", function()
         _G.AimbotEnabled = true
@@ -91,9 +101,11 @@ local aimbotTab = {
         _G.AimbotEnabled = not _G.AimbotEnabled
     end}
 }
+
+-- 👁️ ESP
 local espTab = {
     {"ESP Skeleton Azul", function()
-        for _, p in pairs(game:GetService("Players"):GetPlayers()) do
+        for _, p in pairs(Players:GetPlayers()) do
             if p ~= lp and p.Character then
                 for _, partName in ipairs({"Head", "Torso", "LeftArm", "RightArm", "LeftLeg", "RightLeg"}) do
                     local part = p.Character:FindFirstChild(partName)
@@ -111,6 +123,8 @@ local espTab = {
         end
     end}
 }
+
+-- ❤️ Vida infinita
 local vidaTab = {
     {"Vida infinita", function()
         local char = lp.Character
@@ -129,52 +143,8 @@ local vidaTab = {
         })
     end}
 }
-local scroll = Instance.new("ScrollingFrame", panel)
-scroll.Size = UDim2.new(1, -20, 1, -60)
-scroll.Position = UDim2.new(0, 10, 0, 50)
-scroll.CanvasSize = UDim2.new(0, 0, 0, 1000)
-scroll.ScrollBarThickness = 6
-scroll.BackgroundTransparency = 1
 
-local layout = Instance.new("UIListLayout", scroll)
-layout.Padding = UDim.new(0, 6)
-layout.SortOrder = Enum.SortOrder.LayoutOrder
-
--- Mostrar botones por categoría
-for _, data in ipairs(aimbotTab) do
-    local btn = Instance.new("TextButton", scroll)
-    btn.Size = UDim2.new(1, -10, 0, 30)
-    btn.Text = "🎯 " .. data[1]
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    btn.Font = Enum.Font.Gotham
-    btn.TextSize = 16
-    btn.MouseButton1Click:Connect(data[2])
-end
-
-for _, data in ipairs(espTab) do
-    local btn = Instance.new("TextButton", scroll)
-    btn.Size = UDim2.new(1, -10, 0, 30)
-    btn.Text = "👁️ " .. data[1]
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    btn.Font = Enum.Font.Gotham
-    btn.TextSize = 16
-    btn.MouseButton1Click:Connect(data[2])
-end
-
-for _, data in ipairs(vidaTab) do
-    local btn = Instance.new("TextButton", scroll)
-    btn.Size = UDim2.new(1, -10, 0, 30)
-    btn.Text = "❤️ " .. data[1]
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    btn.Font = Enum.Font.Gotham
-    btn.TextSize = 16
-    btn.MouseButton1Click:Connect(data[2])
-end
-
--- 🔓 Tab de "Robar" / Unlocker
+-- 🔓 Robar / Unlocker
 local stealTab = {
     {"Fake GUI Bait", function()
         local bait = Instance.new("ScreenGui", lp:WaitForChild("PlayerGui"))
@@ -204,7 +174,7 @@ local stealTab = {
     end}
 }
 
--- 🛡️ Tab de Anti-ban
+-- 🛡️ Anti-ban
 local antibanTab = {
     {"Activar Anti-ban", function()
         settings().Network.IncomingReplicationLag = 0.1
@@ -224,11 +194,11 @@ local antibanTab = {
     end}
 }
 
--- 🔊 Tab de Sonido spam
+-- 🔊 Sonido spam
 local soundTab = {
     {"Spam de sonido", function()
         local sound = Instance.new("Sound", workspace)
-        sound.SoundId = "rbxassetid://9118823105" -- sonido agresivo
+        sound.SoundId = "rbxassetid://9118823105"
         sound.Volume = 10
         sound.Looped = true
         sound:Play()
@@ -240,7 +210,7 @@ local soundTab = {
     end}
 }
 
--- 🧬 Tab de Spoofing
+-- 🧬 Spoofing
 local spoofTab = {
     {"Cambiar nombre visual", function()
         lp.DisplayName = "BNXYUNG7🔥"
@@ -248,29 +218,4 @@ local spoofTab = {
     {"Fake Rank", function()
         local tag = Instance.new("BillboardGui", lp.Character.Head)
         tag.Size = UDim2.new(0, 100, 0, 20)
-        tag.StudsOffset = Vector3.new(0, 2, 0)
-        tag.AlwaysOnTop = true
-        local label = Instance.new("TextLabel", tag)
-        label.Size = UDim2.new(1, 0, 1, 0)
-        label.Text = "👑 LEGENDARY"
-        label.TextColor3 = Color3.fromRGB(255, 215, 0)
-        label.BackgroundTransparency = 1
-        label.Font = Enum.Font.GothamBold
-        label.TextSize = 14
-    end}
-}
-
--- 🔁 Mostrar nuevos botones
-local allTabs = {stealTab, antibanTab, soundTab, spoofTab}
-for _, tab in ipairs(allTabs) do
-    for _, data in ipairs(tab) do
-        local btn = Instance.new("TextButton", scroll)
-        btn.Size = UDim2.new(1, -10, 0, 30)
-        btn.Text = "🧨 " .. data[1]
-        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-        btn.Font = Enum.Font.Gotham
-        btn.TextSize = 16
-        btn.MouseButton1Click:Connect(data[2])
-    end
-end
+        tag.Studs
