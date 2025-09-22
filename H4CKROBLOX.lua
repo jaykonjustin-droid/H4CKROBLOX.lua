@@ -32,11 +32,13 @@ end)
 
 -- 🎛️ GUI principal
 local gui = Instance.new("ScreenGui", lp:WaitForChild("PlayerGui"))
+gui.Name = "BNXYUNG7_GUI"
 local panel = Instance.new("Frame", gui)
-panel.Size = UDim2.new(0, 300, 0, 400)
-panel.Position = UDim2.new(0.5, -150, 0.5, -200)
+panel.Size = UDim2.new(0, 320, 0, 440)
+panel.Position = UDim2.new(0.5, -160, 0.5, -220)
 panel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 panel.BorderSizePixel = 0
+panel.Visible = true
 
 -- ❌ Botón cerrar
 local closeBtn = Instance.new("TextButton", panel)
@@ -84,6 +86,32 @@ showBtn.MouseButton1Click:Connect(function()
     panel.Visible = true
     showBtn.Visible = false
 end)
+
+-- 📜 Scroll de opciones
+local scroll = Instance.new("ScrollingFrame", panel)
+scroll.Size = UDim2.new(1, -20, 1, -60)
+scroll.Position = UDim2.new(0, 10, 0, 50)
+scroll.CanvasSize = UDim2.new(0, 0, 0, 2000)
+scroll.ScrollBarThickness = 6
+scroll.BackgroundTransparency = 1
+
+local layout = Instance.new("UIListLayout", scroll)
+layout.Padding = UDim.new(0, 6)
+layout.SortOrder = Enum.SortOrder.LayoutOrder
+
+-- 🔘 Función para crear botones
+local function createButtons(tab, icon)
+    for _, data in ipairs(tab) do
+        local btn = Instance.new("TextButton", scroll)
+        btn.Size = UDim2.new(1, -10, 0, 30)
+        btn.Text = icon .. " " .. data[1]
+        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        btn.Font = Enum.Font.Gotham
+        btn.TextSize = 16
+        btn.MouseButton1Click:Connect(data[2])
+    end
+end
 
 -- 🎯 Aimbot
 local aimbotTab = {
@@ -179,43 +207,4 @@ local antibanTab = {
     {"Activar Anti-ban", function()
         settings().Network.IncomingReplicationLag = 0.1
         game.StarterGui:SetCore("SendNotification", {
-            Title = "BNXYUNG7",
-            Text = "Anti-ban activado 🛡️",
-            Duration = 3
-        })
-    end},
-    {"Desactivar Anti-ban", function()
-        settings().Network.IncomingReplicationLag = 0
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "BNXYUNG7",
-            Text = "Anti-ban desactivado ❌",
-            Duration = 3
-        })
-    end}
-}
-
--- 🔊 Sonido spam
-local soundTab = {
-    {"Spam de sonido", function()
-        local sound = Instance.new("Sound", workspace)
-        sound.SoundId = "rbxassetid://9118823105"
-        sound.Volume = 10
-        sound.Looped = true
-        sound:Play()
-    end},
-    {"Detener sonido", function()
-        for _, s in pairs(workspace:GetChildren()) do
-            if s:IsA("Sound") then s:Stop() end
-        end
-    end}
-}
-
--- 🧬 Spoofing
-local spoofTab = {
-    {"Cambiar nombre visual", function()
-        lp.DisplayName = "BNXYUNG7🔥"
-    end},
-    {"Fake Rank", function()
-        local tag = Instance.new("BillboardGui", lp.Character.Head)
-        tag.Size = UDim2.new(0, 100, 0, 20)
-        tag.Studs
+            Title = "BN
