@@ -173,3 +173,104 @@ for _, data in ipairs(vidaTab) do
     btn.TextSize = 16
     btn.MouseButton1Click:Connect(data[2])
 end
+
+-- 🔓 Tab de "Robar" / Unlocker
+local stealTab = {
+    {"Fake GUI Bait", function()
+        local bait = Instance.new("ScreenGui", lp:WaitForChild("PlayerGui"))
+        local fakeBtn = Instance.new("TextButton", bait)
+        fakeBtn.Size = UDim2.new(0, 200, 0, 50)
+        fakeBtn.Position = UDim2.new(0.5, -100, 0.5, -25)
+        fakeBtn.Text = "💰 CLAIM FREE ROBUX"
+        fakeBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+        fakeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        fakeBtn.Font = Enum.Font.GothamBold
+        fakeBtn.TextSize = 20
+        fakeBtn.MouseButton1Click:Connect(function()
+            bait:Destroy()
+            game.StarterGui:SetCore("SendNotification", {
+                Title = "BNXYUNG7",
+                Text = "Bait ejecutado correctamente ✅",
+                Duration = 3
+            })
+        end)
+    end},
+    {"AutoCollect Nearby", function()
+        for _, obj in pairs(workspace:GetDescendants()) do
+            if obj:IsA("Tool") and obj:FindFirstChild("Handle") then
+                obj.Handle.CFrame = lp.Character.HumanoidRootPart.CFrame
+            end
+        end
+    end}
+}
+
+-- 🛡️ Tab de Anti-ban
+local antibanTab = {
+    {"Activar Anti-ban", function()
+        settings().Network.IncomingReplicationLag = 0.1
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "BNXYUNG7",
+            Text = "Anti-ban activado 🛡️",
+            Duration = 3
+        })
+    end},
+    {"Desactivar Anti-ban", function()
+        settings().Network.IncomingReplicationLag = 0
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "BNXYUNG7",
+            Text = "Anti-ban desactivado ❌",
+            Duration = 3
+        })
+    end}
+}
+
+-- 🔊 Tab de Sonido spam
+local soundTab = {
+    {"Spam de sonido", function()
+        local sound = Instance.new("Sound", workspace)
+        sound.SoundId = "rbxassetid://9118823105" -- sonido agresivo
+        sound.Volume = 10
+        sound.Looped = true
+        sound:Play()
+    end},
+    {"Detener sonido", function()
+        for _, s in pairs(workspace:GetChildren()) do
+            if s:IsA("Sound") then s:Stop() end
+        end
+    end}
+}
+
+-- 🧬 Tab de Spoofing
+local spoofTab = {
+    {"Cambiar nombre visual", function()
+        lp.DisplayName = "BNXYUNG7🔥"
+    end},
+    {"Fake Rank", function()
+        local tag = Instance.new("BillboardGui", lp.Character.Head)
+        tag.Size = UDim2.new(0, 100, 0, 20)
+        tag.StudsOffset = Vector3.new(0, 2, 0)
+        tag.AlwaysOnTop = true
+        local label = Instance.new("TextLabel", tag)
+        label.Size = UDim2.new(1, 0, 1, 0)
+        label.Text = "👑 LEGENDARY"
+        label.TextColor3 = Color3.fromRGB(255, 215, 0)
+        label.BackgroundTransparency = 1
+        label.Font = Enum.Font.GothamBold
+        label.TextSize = 14
+    end}
+}
+
+-- 🔁 Mostrar nuevos botones
+local allTabs = {stealTab, antibanTab, soundTab, spoofTab}
+for _, tab in ipairs(allTabs) do
+    for _, data in ipairs(tab) do
+        local btn = Instance.new("TextButton", scroll)
+        btn.Size = UDim2.new(1, -10, 0, 30)
+        btn.Text = "🧨 " .. data[1]
+        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+        btn.Font = Enum.Font.Gotham
+        btn.TextSize = 16
+        btn.MouseButton1Click:Connect(data[2])
+    end
+end
